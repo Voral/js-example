@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="button.js"></script>
+    <style>
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            max-width: 300px;
+        }
+
+        .toolbar button:last-child {
+            margin-left: auto;
+        }
+
+        button.disabled {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar" class="toolbar">
+</div>
+<pre id="log"></pre>
+<script>
+    document.addEventListener('DOMContentLoaded', (e) => {
+        let disable = false;
+        let buttons = [];
+        const toolbar = document.getElementById('toolbar');
+        const log = document.getElementById('log');
+        const defaultHandler = (e) => {
+            let event = new CustomEvent("exampleLog", {
+                bubbles: true,
+                detail: {message: 'default event ' + e.target.innerText}
+            });
+            toolbar.dispatchEvent(event);
+        }
+        const disableOther = (e) => {
+            disable = !disable;
+            let event = new CustomEvent("exampleToggleDisabled", {bubbles: true, detail: {disable: disable}});
+            e.target.innerText = disable ? 'Enable' : 'Disable';
+            toolbar.dispatchEvent(event);
+        }
+        const removeOther = (e) => {
+            let cache = null;
+            for (const button of buttons) {
+                const element = button.getButton();
+                if (e.target !== button.getButton()) {
+                    button.destroy();
+                    element.remove();
+                } else {
+                    cache = button;
+                }
+            }
+            buttons = [cache];
+        }
+        const buttonsConfig = [
+            {
+                name: 'Button1',
+                handler: defaultHandler,
+                managed: true
+            },
+            {
+                name: 'Button2',
+                handler: defaultHandler,
+                managed: true
+            },
+            {
+                name: 'Disable',
+                handler: disableOther,
+                managed: false
+            },
+            {
+                name: 'Delete',
+                handler: removeOther,
+                managed: false
+            },
+        ]
+
+        toolbar.addEventListener('exampleToggleDisabled', (e) => {
+            for (const button of buttons) {
+                button.toggleDisabled(e.detail.disable);
+            }
+        });
+        document.addEventListener('exampleLog', (e) => {
+            log.innerHTML = e.detail.message + "\r\n" + log.innerHTML;
+        });
+        for (const button of buttonsConfig) {
+            const element = new Button(button);
+            buttons.push(element);
+            toolbar.appendChild(element.getButton());
+        }
+    });
+</script>
+</body>
+</html>
