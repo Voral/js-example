@@ -78,19 +78,35 @@
                 },
             },
         ]
-        for (let i = 0; i < 2; i++)
+        for (let i = 0; i < 2; i++) {
             buttonsConfig.push({
                 name: 'But' + i,
                 handler: function () {
                     this.sendLog('B-' + i)
                 }
             })
+        }
         new Logger({
             element: document.getElementById('log'),
         });
         let toolbar = new Toolbar({
             element: document.getElementById('toolbar'),
             buttons: buttonsConfig,
+        });
+        const setItalic = function () {
+            if (editMode) {
+                this.sendLog('Set italic button clicked');
+                wrapByTag('i');
+            }
+        }
+        toolbar.addDemoButton('Add button', function () {
+            this.sendLog('Add button clicked');
+            toolbar.addButton('I', setItalic);
+            let event = new CustomEvent(REMOVE_ME_EVENT, {
+                bubbles: true,
+                detail: {message: this}
+            });
+            this.button.dispatchEvent(event);
         });
         document.getElementById('removeToolbar').addEventListener('click', () => {
             let element = toolbar.element;

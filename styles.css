@@ -8,6 +8,13 @@
     gap: 8px;
     background: #C0C0C0;
     min-height: 20px;
+    justify-content: space-between;
+}
+
+.toolbar__panel {
+    display: flex;
+    gap: 8px;
+    min-height: 20px;
     flex-wrap: wrap;
 }
 
