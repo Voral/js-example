@@ -1,7 +1,8 @@
+
 class Button {
     constructor(options) {
         this.title = options.name || 'Button';
-        this.handler = options.handler || null;
+        this.handler = options.handler.bind(this) || null;
         this.managed = !!options.managed;
         this.disabled = false;
 
@@ -18,15 +19,19 @@ class Button {
     }
 
     deactivateListeners() {
-        if (this.handler && !this.disabled) {
-            this.disabled = true;
-            let event = new CustomEvent("exampleLog", {
-                bubbles: true,
-                detail: {message: 'Deactivate listeners for ' + this.title}
-            });
-            this.button.dispatchEvent(event);
+        if (!!this.handler && !this.disabled) {
+            this.disabled = true
+            this.sendLog('Deactivate listeners for ' + this.title);
             this.button.removeEventListener('click', this.handler);
         }
+    }
+
+    sendLog(message) {
+        let event = new CustomEvent(LOG_EVENT, {
+            bubbles: true,
+            detail: {message: message}
+        });
+        this.button.dispatchEvent(event);
     }
 
     toggleDisabled(disabled) {

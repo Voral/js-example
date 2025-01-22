@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="button.js"></script>
+    <script src="toolbar.js"></script>
+    <script src="logger.js"></script>
     <style>
         .toolbar {
             display: flex;
             gap: 8px;
             max-width: 300px;
+            padding: 16px 0;
         }
 
         .toolbar button:last-child {
@@ -21,77 +24,38 @@
     </style>
 </head>
 <body>
+<a href="javascript:void(0)" id="removeToolbar">Remove toolbar</a>
 <div id="toolbar" class="toolbar">
 </div>
 <pre id="log"></pre>
 <script>
-    document.addEventListener('DOMContentLoaded', (e) => {
-        let disable = false;
-        let buttons = [];
-        const toolbar = document.getElementById('toolbar');
-        const log = document.getElementById('log');
-        const defaultHandler = (e) => {
-            let event = new CustomEvent("exampleLog", {
-                bubbles: true,
-                detail: {message: 'default event ' + e.target.innerText}
-            });
-            toolbar.dispatchEvent(event);
-        }
-        const disableOther = (e) => {
-            disable = !disable;
-            let event = new CustomEvent("exampleToggleDisabled", {bubbles: true, detail: {disable: disable}});
-            e.target.innerText = disable ? 'Enable' : 'Disable';
-            toolbar.dispatchEvent(event);
-        }
-        const removeOther = (e) => {
-            let cache = null;
-            for (const button of buttons) {
-                const element = button.getButton();
-                if (e.target !== button.getButton()) {
-                    button.destroy();
-                    element.remove();
-                } else {
-                    cache = button;
-                }
-            }
-            buttons = [cache];
-        }
+    document.addEventListener('DOMContentLoaded', () => {
         const buttonsConfig = [
             {
                 name: 'Button1',
-                handler: defaultHandler,
-                managed: true
+                handler: function () {
+                    this.sendLog('Click button1')
+                },
             },
             {
                 name: 'Button2',
-                handler: defaultHandler,
-                managed: true
-            },
-            {
-                name: 'Disable',
-                handler: disableOther,
-                managed: false
-            },
-            {
-                name: 'Delete',
-                handler: removeOther,
-                managed: false
+                handler: function () {
+                    this.sendLog('Click button2')
+                },
             },
         ]
-
-        toolbar.addEventListener('exampleToggleDisabled', (e) => {
-            for (const button of buttons) {
-                button.toggleDisabled(e.detail.disable);
-            }
+        let toolbar = new Toolbar({
+            element: document.getElementById('toolbar'),
+            buttons: buttonsConfig,
         });
-        document.addEventListener('exampleLog', (e) => {
-            log.innerHTML = e.detail.message + "\r\n" + log.innerHTML;
+        new Logger({
+            element: document.getElementById('log'),
         });
-        for (const button of buttonsConfig) {
-            const element = new Button(button);
-            buttons.push(element);
-            toolbar.appendChild(element.getButton());
-        }
+        document.getElementById('removeToolbar').addEventListener('click', () => {
+            let element = toolbar.element;
+            toolbar.destroy();
+            element.remove();
+        });
     });
 </script>
 </body>
