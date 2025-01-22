@@ -3,7 +3,6 @@ class Button {
         this.options = options;
         this.handler = options.handler.bind(this) || null;
         this.disabled = false;
-
         this.button = document.createElement('button');
         this.button.innerText = options.name || 'Button';
         this.activateListeners();

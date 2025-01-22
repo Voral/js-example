@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="button.js"></script>
+</head>
+<body>
+<div style="display: flex;gap:16px">
+    <a href="?type=pair">Pair</a>
+    <a href="?type=dom">DOM only</a>
+    <a href="?type=empty">Empty</a>
+</div>
+<div id="app"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const count = 100000;
+        let buttonsConfig = [];
+        const app = document.getElementById('app');
+        const setConfig = () => {
+            for (let i = 0; i < count; i++)
+                buttonsConfig.push({
+                    name: 'B' + i,
+                    handler: function () {
+                        console.log('click B-' + i);
+                    }
+                })
+        }
+        const createDOMOnly = () => {
+            for (const button of buttonsConfig) {
+                let el = document.createElement('button');
+                el.innerText = button.name;
+                el.addEventListener('click', button.handler.bind(el));
+                app.appendChild(el);
+            }
+        }
+        const createPair = () => {
+            for (const button of buttonsConfig) {
+                button.managed = true;
+                let el = new Button(button);
+                app.appendChild(el.getButton());
+            }
+        }
+        const run = ()=>{
+            const url = new URL(window.location.href);
+            const typeValue = url.searchParams.get('type')??'empty';
+            const startTime = performance.now()
+
+            if (typeValue === 'pair') {
+                createPair();
+            } else if (typeValue === 'dom') {
+                createDOMOnly();
+            }
+            const endTime = performance.now()
+            console.log(`Call to ${typeValue} took ${endTime - startTime} milliseconds`)
+        }
+
+        setConfig();
+        run();
+    });
+</script>
+</body>
+</html>

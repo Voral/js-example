@@ -38,7 +38,6 @@ class Toolbar {
             button.getButton().remove();
         }
     }
-
     disableOther = (e) => {
         this.customButtonsDisabled = !this.customButtonsDisabled;
         e.target.innerText = this.customButtonsDisabled ? 'Enable' : 'Disable';
