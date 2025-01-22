@@ -87,6 +87,7 @@ class Toolbar {
         }
         options.instance = new Button(options);
         this.editorPanel.appendChild(options.instance.getButton());
+        this.buttons.push(options);
     }
 
     addDemoButton(title, handler) {
