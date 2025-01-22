@@ -3,53 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="button.js"></script>
     <script src="toolbar.js"></script>
     <script src="logger.js"></script>
-    <style>
-        .toolbar {
-            display: flex;
-            gap: 8px;
-            max-width: 300px;
-            padding: 16px 0;
-        }
-
-        .toolbar button:last-child {
-            margin-left: auto;
-        }
-
-        button.disabled {
-            opacity: 0.5;
-        }
-    </style>
 </head>
 <body>
-<a href="javascript:void(0)" id="removeToolbar">Remove toolbar</a>
-<div id="toolbar" class="toolbar">
+<div class="app">
+    <a href="javascript:void(0)" id="removeToolbar">Remove toolbar</a>
+    <div id="toolbar" class="toolbar"></div>
+    <div class="editor" id="editor">Lorem ipsum dolor sit amet, <b>consectetuer</b> adipiscing elit.</div>
+    <pre id="log" class="logger"></pre>
 </div>
-<pre id="log"></pre>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const editor = document.getElementById('editor');
+        let editMode = false;
+        let observer = new MutationObserver((mutationList, observer) => {
+            if (editor.classList.contains('changed')) {
+                return;
+            }
+            for (const mutation of mutationList) {
+                if (mutation.type === "characterData") {
+                    editor.classList.add('changed');
+                }
+            }
+        });
+        const wrapByTag = (tag) => {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                if (editor.contains(range.startContainer) || editor.contains(range.endContainer)) {
+                    const selectedText = selection.toString();
+                    if (selectedText) {
+                        const bTag = document.createElement(tag);
+                        bTag.textContent = selectedText;
+                        range.deleteContents();
+                        range.insertNode(bTag);
+                    }
+                }
+            }
+        }
         const buttonsConfig = [
             {
-                name: 'Button1',
-                handler: function () {
-                    this.sendLog('Click button1')
+                name: 'Edit',
+                handler: function (e) {
+                    this.sendLog('Click ' + e.target.innerHTML);
+                    if (editMode) {
+                        editor.contentEditable = 'false';
+                        e.target.innerHTML = 'Edit';
+                        observer.disconnect();
+                        editMode = false;
+                        editor.classList.remove('changed');
+                    } else {
+                        editor.contentEditable = 'true';
+                        e.target.innerHTML = 'Save';
+                        observer.observe(editor, {
+                            childList: true,
+                            subtree: true,
+                            characterDataOldValue: true
+                        });
+                        editMode = true;
+                    }
                 },
             },
             {
-                name: 'Button2',
-                handler: function () {
-                    this.sendLog('Click button2')
+                name: 'B',
+                handler: function (e) {
+                    if (editMode) {
+                        this.sendLog('Click ' + e.target.innerHTML);
+                        wrapByTag('b');
+                    }
                 },
             },
         ]
+        for (let i = 0; i < 2; i++)
+            buttonsConfig.push({
+                name: 'But' + i,
+                handler: function () {
+                    this.sendLog('B-' + i)
+                }
+            })
+        new Logger({
+            element: document.getElementById('log'),
+        });
         let toolbar = new Toolbar({
             element: document.getElementById('toolbar'),
             buttons: buttonsConfig,
-        });
-        new Logger({
-            element: document.getElementById('log'),
         });
         document.getElementById('removeToolbar').addEventListener('click', () => {
             let element = toolbar.element;

@@ -1,28 +1,26 @@
-
 class Button {
     constructor(options) {
-        this.title = options.name || 'Button';
+        this.options = options;
         this.handler = options.handler.bind(this) || null;
-        this.managed = !!options.managed;
         this.disabled = false;
 
         this.button = document.createElement('button');
-        this.button.innerText = this.title;
+        this.button.innerText = options.name || 'Button';
         this.activateListeners();
     }
 
     activateListeners() {
         if (this.handler) {
             this.disabled = false;
-            this.button.addEventListener('click', this.handler);
+            this.button.addEventListener('click', this.options.handler.bind(this));
         }
     }
 
     deactivateListeners() {
         if (!!this.handler && !this.disabled) {
             this.disabled = true
-            this.sendLog('Deactivate listeners for ' + this.title);
-            this.button.removeEventListener('click', this.handler);
+            this.sendLog('Deactivate listeners for ' + this.button.innerText);
+            this.button.removeEventListener('click', this.options.handler.bind(this));
         }
     }
 
@@ -35,7 +33,7 @@ class Button {
     }
 
     toggleDisabled(disabled) {
-        if (this.managed) {
+        if (this.options.managed) {
             // this.button.disabled = disabled; // закомментировано для тестирования
             this.button.classList.toggle('disabled', disabled);
             if (disabled) {
