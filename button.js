@@ -1,6 +1,7 @@
 class Button {
     constructor(options) {
         this.options = options;
+        this.handler = this.options.handler.bind(this);
         this.disabled = false;
         this.button = document.createElement('button');
         this.button.innerText = options.name || 'Button';
@@ -8,17 +9,17 @@ class Button {
     }
 
     activateListeners() {
-        if (this.options.handler) {
+        if (this.handler) {
             this.disabled = false;
-            this.button.addEventListener('click', this.options.handler.bind(this));
+            this.button.addEventListener('click', this.handler);
         }
     }
 
     deactivateListeners() {
-        if (!!this.options.handler && !this.disabled) {
+        if (!!this.handler && !this.disabled) {
             this.disabled = true
             this.sendLog('Deactivate listeners for ' + this.button.innerText);
-            this.button.removeEventListener('click', this.options.handler.bind(this));
+            this.button.removeEventListener('click', this.handler);
         }
     }
 
