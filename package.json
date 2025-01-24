@@ -8,9 +8,10 @@
     "coverage": "jest --coverage",
     "start": "webpack serve --open",
     "build:prod": "webpack --mode production",
-    "build:dev": "webpack --mode development",
     "build:btn:dev": "webpack --config webpack.btn.js --mode development",
-    "build:btn:prod": "webpack --config webpack.btn.js --mode production"
+    "build:dev": "webpack --mode development",
+    "build:btn:prod": "webpack --config webpack.btn.js --mode production",
+    "build": "npm run build:prod && npm run build:btn:dev"
   },
   "repository": {
     "type": "git",
