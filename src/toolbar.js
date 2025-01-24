@@ -1,8 +1,13 @@
+import {Button} from './button.js';
+
 export const REMOVE_ME_EVENT = 'exampleRemoveMe';
 
 export class Toolbar {
     constructor(options) {
         this.element = options.element || null;
+        if (this.element === null) {
+            return;
+        }
         this.buttons = options.buttons || [];
         this.demoButtons = [];
         this.createPanels();
@@ -13,6 +18,9 @@ export class Toolbar {
     }
 
     onRemoveQuery(e) {
+        if (this.element === null) {
+            return;
+        }
         for (const button of this.demoButtons) {
             if (button.button === e.target) {
                 this.removeButton(button)
@@ -23,6 +31,9 @@ export class Toolbar {
     }
 
     createPanels() {
+        if (this.element === null) {
+            return;
+        }
         this.editorPanel = document.createElement('div');
         this.editorPanel.classList.add('toolbar__panel');
         this.demoPanel = document.createElement('div');
@@ -32,6 +43,9 @@ export class Toolbar {
     }
 
     initSelfButtons() {
+        if (this.element === null) {
+            return;
+        }
         this.btnDisable = new Button({
             managed: false,
             name: 'Disable',
@@ -47,6 +61,9 @@ export class Toolbar {
     }
 
     deleteOther = () => {
+        if (this.element === null) {
+            return;
+        }
         this.customButtonsDisabled = !this.customButtonsDisabled;
         for (const button of this.buttons) {
             this.removeButton(button.instance);
@@ -64,6 +81,9 @@ export class Toolbar {
     }
 
     disableOther = (e) => {
+        if (this.element === null) {
+            return;
+        }
         this.customButtonsDisabled = !this.customButtonsDisabled;
         e.target.innerText = this.customButtonsDisabled ? 'Enable' : 'Disable';
         for (const button of this.buttons) {
@@ -72,6 +92,9 @@ export class Toolbar {
     }
 
     initButtons() {
+        if (this.element === null) {
+            return;
+        }
         for (const button of this.buttons) {
             button.managed = true;
             button.instance = new Button(button);
@@ -80,6 +103,9 @@ export class Toolbar {
     }
 
     addButton(title, handler) {
+        if (this.element === null) {
+            return;
+        }
         const options = {
             name: title,
             handler: handler,
@@ -91,6 +117,9 @@ export class Toolbar {
     }
 
     addDemoButton(title, handler) {
+        if (this.element === null) {
+            return;
+        }
         const options = {
             name: title,
             handler: handler,
@@ -102,6 +131,9 @@ export class Toolbar {
     }
 
     destroy() {
+        if (this.element === null) {
+            return;
+        }
         this.deleteOther();
         this.removeButton(this.btnDelete);
     }

@@ -1,7 +1,6 @@
 // noinspection JSUnresolvedReference
 
 import {Button} from '../src/button';
-import {Logger} from "../src/logger";
 
 describe('Button', () => {
     let buttonInstance;
@@ -65,9 +64,12 @@ describe('Button', () => {
         expect(true).toBe(true);
     });
 
-    test('should return early if handler not defined on toggling disabled state', () => {
-        buttonInstance = new Button({name: 'Test Button', managed: true});
+    test('should not manage the "disable" CSS class if not managed button', () => {
+        buttonInstance = new Button({name: 'Test Button', managed: false});
         buttonInstance.toggleDisabled(true);
+        expect(buttonInstance.getButton().classList.contains('disabled')).toBe(false);
+        buttonInstance.toggleDisabled(false);
+        expect(buttonInstance.getButton().classList.contains('disabled')).toBe(false);
         expect(true).toBe(true);
     });
 
