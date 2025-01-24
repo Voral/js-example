@@ -1,4 +1,4 @@
-class Button {
+export class Button {
     constructor(options) {
         this.options = options;
         this.handler = this.options.handler.bind(this);

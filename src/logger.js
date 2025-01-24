@@ -1,6 +1,6 @@
-const LOG_EVENT = 'exampleLog';
+export const LOG_EVENT = 'exampleLog';
 
-class Logger {
+export class Logger {
     constructor(options) {
         this.element = options.element || null;
 

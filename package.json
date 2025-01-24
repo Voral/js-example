@@ -1,0 +1,35 @@
+{
+  "name": "example",
+  "version": "4.0.0",
+  "description": "Легкий редактор",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open",
+    "build:prod": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "build:btn:dev": "webpack --config webpack.btn.js --mode development",
+    "build:btn:prod": "webpack --config webpack.btn.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Voral/js-example.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Voral/js-example/issues"
+  },
+  "homepage": "https://github.com/Voral/js-example#readme",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^5.2.0"
+  }
+}

@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="styles.css">
-
-    <script src="button.js"></script>
-    <script src="toolbar.js"></script>
-    <script src="logger.js"></script>
+    <script src="bundle.js"></script>
 </head>
 <body>
 <div class="app">
@@ -109,6 +106,15 @@
             this.button.dispatchEvent(event);
         });
         document.getElementById('removeToolbar').addEventListener('click', () => {
+            const startTime = performance.now()
+            const date = Date.now();
+            let currentDate = null;
+            do {
+                currentDate = Date.now();
+            } while (currentDate - date < 20000);
+            const endTime = performance.now()
+            console.log(`Sleep ${endTime - startTime} milliseconds`)
+
             let element = toolbar.element;
             toolbar.destroy();
             element.remove();

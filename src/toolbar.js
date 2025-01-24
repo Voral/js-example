@@ -1,6 +1,6 @@
-const REMOVE_ME_EVENT = 'exampleRemoveMe';
+export const REMOVE_ME_EVENT = 'exampleRemoveMe';
 
-class Toolbar {
+export class Toolbar {
     constructor(options) {
         this.element = options.element || null;
         this.buttons = options.buttons || [];

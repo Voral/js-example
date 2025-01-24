@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="button.js"></script>
+    <script src="bundle.btn.js"></script>
 </head>
 <body>
 <div style="display: flex;gap:16px">
@@ -41,9 +41,9 @@
                 app.appendChild(el.getButton());
             }
         }
-        const run = ()=>{
+        const run = () => {
             const url = new URL(window.location.href);
-            const typeValue = url.searchParams.get('type')??'empty';
+            const typeValue = url.searchParams.get('type') ?? 'empty';
             const startTime = performance.now()
 
             if (typeValue === 'pair') {
@@ -54,7 +54,6 @@
             const endTime = performance.now()
             console.log(`Call to ${typeValue} took ${endTime - startTime} milliseconds`)
         }
-
         setConfig();
         run();
     });
