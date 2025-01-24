@@ -3,15 +3,21 @@ export const LOG_EVENT = 'exampleLog';
 export class Logger {
     constructor(options) {
         this.element = options.element || null;
-
-        document.addEventListener(LOG_EVENT, this.log.bind(this));
+        if (this.element !== null) {
+            document.addEventListener(LOG_EVENT, this.log.bind(this));
+        }
     }
 
     log(e) {
+        if (this.element === null) {
+            return;
+        }
         this.element.innerText += e.detail.message + '\n';
     }
 
     destroy() {
-        document.removeEventListener(LOG_EVENT, this.log.bind(this));
+        if (this.element !== null) {
+            document.removeEventListener(LOG_EVENT, this.log.bind(this));
+        }
     }
 }
