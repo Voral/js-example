@@ -1,7 +1,9 @@
+import {LOG_EVENT} from "./logger";
+
 export class Button {
     constructor(options) {
         this.options = options;
-        this.handler = this.options.handler.bind(this);
+        this.handler = this.options.handler ? this.options.handler.bind(this) : null;
         this.disabled = false;
         this.button = document.createElement('button');
         this.button.innerText = options.name || 'Button';

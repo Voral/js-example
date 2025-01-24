@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedReference
+
 import {Logger} from '../src/logger';
 
 describe('Logger', () => {
